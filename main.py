@@ -9,12 +9,13 @@ CORS(app)
 # Load OpenAI Client
 def create_openai_client():
     api_key = os.getenv("OPENAI_API_KEY")
+    api_project = os.getenv("OPENAI_PROJECT_NUMBER")
 
     if not api_key:
         raise ValueError("OPENAI_API_KEY is not set in environment variables.")
 
     try:
-        client = openai.OpenAI(api_key=api_key, project="proj_yadk17XSGzr8n2a5jsF2VUvO")
+        client = openai.OpenAI(api_key=api_key, project=api_project)
 
         # Collect available models
         models = client.models.list()
