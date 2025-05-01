@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test /generate API with Loading Spinner</title>
+</head>
+<body>
+    <h1>OpenAI SQL Generator</h1>
+
+    <form id="sqlForm">
+        <label for="question">Enter your question:</label><br><br>
+        <input type="text" id="question" name="question" size="80"><br><br>
+        <button type="submit">Send POST Request</button>
+    </form>
+
+    <h2>Response:</h2>
+    <div id="loading" style="display: none;">Loading...</div>
+    <pre id="responseArea"></pre>
+
+    <script>
+        const form = document.getElementById('sqlForm');
+        const responseArea = document.getElementById('responseArea');
+        const loading = document.getElementById('loading');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();  // Prevent page refresh
+            responseArea.textContent = '';
+            loading.style.display = 'block';  // Show Loading...
+
+            const question = document.getElementById('question').value;
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ question: question })
+                });
+
+                const data = await response.json();
+                responseArea.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                responseArea.textContent = `Error: ${error}`;
+            } finally {
+                loading.style.display = 'none';  // Hide Loading...
+            }
+        });
+    </script>
+</body>
+</html>
